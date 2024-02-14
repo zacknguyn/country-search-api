@@ -11,20 +11,24 @@ import '@fontsource/roboto/700.css';
 import createEmotionCache from '../utility/createEmotionCache';
 import lightThemeOptions from '../styles/theme/lightThemeOptions';
 import '../styles/globals.css';
+import { useStore } from '../store';
+import darkThemeOptions from '../styles/theme/darkThemeOptions';
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
 
 const clientSideEmotionCache = createEmotionCache();
 
+const darkTheme = createTheme(darkThemeOptions);
 const lightTheme = createTheme(lightThemeOptions);
 
 const MyApp: React.FunctionComponent<MyAppProps> = (props) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
+  const isDarkMode = useStore((state) => state.isDarkMode);
   return (
     <CacheProvider value={emotionCache}>
-      <ThemeProvider theme={lightTheme}>
+      <ThemeProvider theme={isDarkMode ? darkTheme: lightTheme}>
         <CssBaseline />
         <Component {...pageProps} />
       </ThemeProvider>
